@@ -3,7 +3,7 @@ import {assetsManager} from "./AssetsManager.js";
 
 export default class Storage {
 
-  static assetsPrefix = "/test-task/assets/";
+  static assetsPrefix = "/test-tas-crada/assets/";
 
   constructor({assetsData}) {
     this.assetsData = assetsData;

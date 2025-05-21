@@ -7,27 +7,27 @@ export default class Wrapper {
 
   eventDispatcher = new EventDispatcher();
 
-  constructor({tweenSpaces, container, assetsData}) {
+  constructor({tweensSpace, container, assetsData}) {
     this.container = container;
     this.storage = new Storage({assetsData});
-    this.tweenSpaces = tweenSpaces;
+    this.tweensSpace = tweensSpace;
   }
 
   async prepareScene() {
-    const {storage, tweenSpaces} = this;
+    const {storage, tweensSpace} = this;
 
-    if (typeof tweenSpaces === "string") {
+    if (typeof tweensSpace === "string") {
       gsap.localTimeline = new LocalTimeline();
-      gsap.localTimeline.createSpace(tweenSpaces);
+      gsap.localTimeline.createSpace(tweensSpace);
     }
 
     await storage.load();
   }
 
   initController({ControllerConstructor, stateMachine, gameSettings}) {
-    const {container, eventDispatcher, storage} = this;
+    const {container, eventDispatcher, tweensSpace, storage} = this;
     return this.controller = new ControllerConstructor({
-      container, eventDispatcher, storage, stateMachine, gameSettings
+      container, eventDispatcher, tweensSpace, storage, stateMachine, gameSettings
     });
   }
 }

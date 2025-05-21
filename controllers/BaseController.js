@@ -85,11 +85,20 @@ export default class BaseController {
     eventSubscription({callbacksBus});
   }
 
+  append() {
+    const {container, canvas} = this;
+    container.appendChild(canvas);
+  }
+
   initScene() {
     const {applicationSettings} = this;
 
     this.app = new PIXI.Application({
-      transparent: true, resolution: Math.min(2, globalThis.devicePixelRatio), autoResize: true, antialias: true,
+      transparent: true,
+      backgroundColor: 0xffffff,
+      resolution: Math.min(2, globalThis.devicePixelRatio),
+      autoResize: true,
+      antialias: true,
       ...applicationSettings
     });
 
@@ -98,6 +107,8 @@ export default class BaseController {
     this.stage = this.app.stage;
 
     this.renderer = this.app.renderer;
+
+    this.canvas = this.renderer.view;
 
     this.onResize();
   }
@@ -113,9 +124,12 @@ export default class BaseController {
   }
 
   onResize() {
-    const {container, renderer} = this;
+    const {container, canvas, renderer} = this;
 
     const {offsetWidth: width, offsetHeight: height} = container;
+
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
 
     renderer.resize(width, height);
 

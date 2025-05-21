@@ -24,14 +24,14 @@ export default class BaseGameFactory {
     if (typeof createCallback !== "function")
       throw new Error("Type not found");
 
-    const {props, Constructor} = createCallback(modifiedData, type);
+    const {props = {}, Constructor} = createCallback(modifiedData, type);
 
     const {isFindReused, item} = this.returnReusedItem(props, type);
 
     if (isFindReused)
       return item;
 
-    const newEntity = new Constructor(props, type);
+    const newEntity = new Constructor({...props, type});
 
     newEntity.factoryUid = `${type}:${this.uidCounter++}`;
 

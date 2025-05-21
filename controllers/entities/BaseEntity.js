@@ -2,9 +2,21 @@ import {gameFactory} from "../factory/GameFactory.js";
 import {eventSubscription} from "../../utils/events/eventSubscription.js";
 
 export default class BaseEntity {
+
+  _view;
+
   constructor(data) {
     this.initBaseProperties(data);
     this.initBaseEvents();
+  }
+
+  get view() {
+    return this._view;
+  }
+
+  set view(view) {
+    this._view = view;
+    view.name = this.id;
   }
 
   initBaseEvents() {
@@ -22,8 +34,8 @@ export default class BaseEntity {
     eventSubscription({target: eventDispatcher, callbacksBus});
   }
 
-  initBaseProperties({id, type, state, storage, stage, eventDispatcher}) {
-    const fieldsObject = {id, type, state, storage, stage, eventDispatcher};
+  initBaseProperties({id, type, state, storage, stage, tweensSpace, eventDispatcher}) {
+    const fieldsObject = {id, type, state, storage, stage, tweensSpace, eventDispatcher};
 
     for (const key in fieldsObject) {
       this[key] = fieldsObject[key];
@@ -40,6 +52,12 @@ export default class BaseEntity {
 
   reset(data) {
     this.initBaseEvents(data);
+  }
+
+  rememberListeners(clearFunction) {
+    if (typeof this.prevClearFunction === "function")
+      this.prevClearFunction();
+    this.prevClearFunction = clearFunction;
   }
 
   destroy() {

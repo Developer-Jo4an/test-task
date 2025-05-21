@@ -5,3 +5,4 @@ import GameGeneralController from "./controllers/controllers/GameGeneralControll
 const wrapper = new Wrapper({container: document.getElementById("scene"), tweensSpace: gameTweensSpaceId, assetsData});
 await wrapper.prepareScene();
 const controller = wrapper.initController({ControllerConstructor: GameGeneralController, stateMachine, gameSettings});
+controller.append();
