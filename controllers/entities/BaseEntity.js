@@ -5,9 +5,19 @@ export default class BaseEntity {
 
   _view;
 
+  _isDestroyed;
+
   constructor(data) {
     this.initBaseProperties(data);
     this.initBaseEvents();
+  }
+
+  get isDestroyed() {
+    return this._isDestroyed;
+  }
+
+  set isDestroyed(isDestroyed) {
+    this._isDestroyed = isDestroyed;
   }
 
   get view() {
@@ -26,7 +36,7 @@ export default class BaseEntity {
       {
         event: "state:changed", callback: ({state}) => {
           this.state = state;
-          this.onStateChanged(state);
+          !this.isDestroyed && this.onStateChanged(state);
         }
       }
     ];
@@ -34,8 +44,8 @@ export default class BaseEntity {
     eventSubscription({target: eventDispatcher, callbacksBus});
   }
 
-  initBaseProperties({id, type, state, storage, stage, tweensSpace, eventDispatcher}) {
-    const fieldsObject = {id, type, state, storage, stage, tweensSpace, eventDispatcher};
+  initBaseProperties({id, type, state, storage, gameSettings, stage, tweensSpace, eventDispatcher}) {
+    const fieldsObject = {id, type, state, storage, gameSettings, stage, tweensSpace, eventDispatcher};
 
     for (const key in fieldsObject) {
       this[key] = fieldsObject[key];
@@ -51,7 +61,7 @@ export default class BaseEntity {
   }
 
   reset(data) {
-    this.initBaseEvents(data);
+    this.initBaseProperties(data);
   }
 
   rememberListeners(clearFunction) {

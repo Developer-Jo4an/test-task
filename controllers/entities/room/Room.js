@@ -38,6 +38,8 @@ export default class Room extends BaseEntity {
   updateLayout(limitation) {
     const {view} = this;
 
+    view.scale.set(1);
+
     const scale = limitation / view.height;
 
     view.scale.set(scale);

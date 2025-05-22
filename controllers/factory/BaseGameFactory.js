@@ -50,7 +50,7 @@ export default class BaseGameFactory {
 
     reusedItem.isDestroyed = false;
 
-    reusedItem.reset(data);
+    reusedItem.reset({...data, type});
 
     this.setItemByType(type, reusedItem);
 

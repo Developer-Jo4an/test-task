@@ -1,13 +1,14 @@
 import BaseController from "../BaseController.js";
 import GridController from "./GridController.js";
 import RoomController from "./RoomController.js";
-import {createGameFactory} from "../factory/GameFactory.js";
+import GameStatsController from "./GameStatsController.js";
+import {createGameFactory, gameFactory} from "../factory/GameFactory.js";
 import {createUtils} from "../utils/GameUtils.js";
 import {gameSize} from "../../constants/game.js";
 
 export default class GameGeneralController extends BaseController {
 
-  static controllersClasses = [GridController, RoomController];
+  static controllersClasses = [GridController, RoomController, GameStatsController];
 
   controllers = [];
 
@@ -22,13 +23,19 @@ export default class GameGeneralController extends BaseController {
     this.init();
   }
 
+  init() {
+    super.init();
+
+    this.stage.sortableChildren = true;
+  }
+
   createControllersSelect() {
     const {
-      app, stage, storage, renderer, tweensSpace, gameSettings, eventDispatcher, state, container, stateMachine
+      app, stage, storage, renderer, canvas, tweensSpace, gameSettings, eventDispatcher, state, container, stateMachine
     } = this;
 
     const generalData = {
-      app, stage, storage, renderer, tweensSpace, gameSettings, eventDispatcher, state, container, stateMachine
+      app, stage, storage, renderer, canvas, tweensSpace, gameSettings, eventDispatcher, state, container, stateMachine
     };
 
     createGameFactory(generalData);
@@ -41,8 +48,20 @@ export default class GameGeneralController extends BaseController {
     });
   }
 
-  initializationSelect() {
+  showingSelect() {
     this.isActive = true;
+  }
+
+  winSelect() {
+    const {tweensSpace} = this;
+    gsap.localTimeline.clear(tweensSpace);
+    this.isActive = false;
+  }
+
+  loseSelect() {
+    const {tweensSpace} = this;
+    gsap.localTimeline.clear(tweensSpace);
+    this.isActive = false;
   }
 
   update(deltaTime) {
@@ -53,7 +72,7 @@ export default class GameGeneralController extends BaseController {
   onResize(data) {
     const {width, height} = super.onResize(data);
 
-    const scale = Math.min(width / gameSize.width, height / gameSize.height);
+    const scale = height / gameSize.height;
 
     this.stage.scale.set(scale);
 
@@ -61,5 +80,19 @@ export default class GameGeneralController extends BaseController {
       (width - gameSize.width * scale) / 2,
       (height - gameSize.height * scale) / 2
     );
+  }
+
+  resetSelect() {
+    const destroyTypes = ["cell", "aim", "target", "grid"];
+
+    destroyTypes.forEach(type => {
+      const collection = gameFactory.getCollectionByType(type) ?? [];
+      collection.forEach(entity => entity.destroy());
+    });
+  }
+
+  destroy() {
+    this.isActive = false;
+    this.controllers.forEach(controller => controller.destroy());
   }
 }

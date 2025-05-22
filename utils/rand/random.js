@@ -15,6 +15,10 @@ export function randFromArray(arr) {
   return arr[randInteger(arr.length)];
 }
 
+export function minmax(value, min, max) {
+  return Math.max(min, Math.min(value, max));
+}
+
 export function randFromWeightedArray(arr) {
   const {total, map} = arr.reduce(initWeights, {total: 0, map: []});
 

@@ -7,18 +7,53 @@ export const stateMachine = {
     ignoreNext: false
   },
   initialization: {
-    availableStates: ["playing"],
-    nextState: "playing",
+    availableStates: ["showing"],
+    nextState: "showing",
     isLoading: true,
     isDefault: false,
     ignoreNext: false
   },
+  showing: {
+    availableStates: ["playing"],
+    nextState: "playing",
+    isLoading: false,
+    isDefault: false,
+    ignoreNext: false
+  },
   playing: {
-    availableStates: [],
-    nextState: "",
+    availableStates: ["feedback", "win", "lose"],
+    nextState: "feedback",
     isLoading: false,
     isDefault: false,
     ignoreNext: true
+  },
+  feedback: {
+    availableStates: ["playing"],
+    nextState: "playing",
+    isLoading: false,
+    isDefault: false,
+    ignoreNext: false
+  },
+  win: {
+    availableStates: ["reset"],
+    nextState: "reset",
+    isLoading: false,
+    isDefault: false,
+    ignoreNext: true
+  },
+  lose: {
+    availableStates: ["reset"],
+    nextState: "reset",
+    isLoading: false,
+    isDefault: false,
+    ignoreNext: true
+  },
+  reset: {
+    availableStates: ["initialization"],
+    nextState: "initialization",
+    isLoading: false,
+    isDefault: false,
+    ignoreNext: false
   }
 };
 
@@ -28,10 +63,16 @@ export const gameTweensSpaceId = "game";
 
 export const gameSettings = {
   grid: {
-    rows: 6, columns: 7
+    rows: 6, columns: 7,
+    spaceBetween: {x: 8, y: 8},
+    padding: 20
   },
   target: {
     count: 3
+  },
+  rooms: ["light", "dark"],
+  stats: {
+    target: 3
   }
 };
 
@@ -55,5 +96,9 @@ export const assetsData = [
 
   {path: "character/character.png", name: "character", storageType: "texture"},
   {path: "character/character-eyelids.png", name: "characterEyelids", storageType: "texture"},
-  {path: "character/character-shadow.png", name: "characterShadow", storageType: "texture"}
+  {path: "character/character-shadow.png", name: "characterShadow", storageType: "texture"},
+
+  {path: "target/pendulum-arrow.png", name: "pendulumArrow", storageType: "texture"},
+  {path: "target/pendulum-general.png", name: "pendulumGeneral", storageType: "texture"},
+  {path: "target/pendulum-top.png", name: "pendulumTop", storageType: "texture"}
 ];

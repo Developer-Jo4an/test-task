@@ -1,11 +1,17 @@
 import {eventSubscription} from "../../utils/events/eventSubscription.js";
 
 export default class BaseGameController {
-  constructor({app, stage, storage, renderer, eventDispatcher, state, container, stateMachine}) {
+  constructor(
+    {
+      app, stage, storage, tweensSpace, renderer, canvas, gameSettings, eventDispatcher, state, container, stateMachine
+    }) {
     this.app = app;
     this.stage = stage;
     this.storage = storage;
+    this.tweensSpace = tweensSpace;
     this.renderer = renderer;
+    this.canvas = canvas;
+    this.gameSettings = gameSettings;
     this.eventDispatcher = eventDispatcher;
     this.state = state;
     this.container = container;
@@ -31,6 +37,12 @@ export default class BaseGameController {
     ];
 
     eventSubscription({target: eventDispatcher, callbacksBus});
+  }
+
+  setState(state) {
+    const {eventDispatcher} = this;
+
+    eventDispatcher.dispatchEvent({type: "state:change", state});
   }
 
   onStateChanged(state) {

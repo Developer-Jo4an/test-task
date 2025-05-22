@@ -9,9 +9,12 @@ class GameUtils extends BaseUtils {
   }
 
   getCellSize() {
-    const {gameSettings: {grid: {columns}}} = this;
+    const {gameSettings: {grid: {columns, spaceBetween: {x}, padding}}} = this;
 
-    const width = gameSize.width / columns, height = gameSize.width / columns;
+    const freeHorizontal = gameSize.width - (x * (columns - 1)) - (padding * 2);
+
+    const width = freeHorizontal / columns;
+    const height = freeHorizontal / columns;
 
     return {width, height};
   }
