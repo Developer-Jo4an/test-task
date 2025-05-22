@@ -27,9 +27,10 @@ export default class Room extends BaseEntity {
     room.anchor.set(0.5);
     view.addChild(room);
 
-    const {view: characterView, shadow, eyes} = gameFactory.createItem("character", {id: `character:${entityId}`});
+    const character = this.character ??= gameFactory.createItem("character", {id: `character:${entityId}`});
+    const {view: characterView, shadow, eyes} = character;
     characterView.position.set(-room.width * 0.314, -room.height * 0.142);
-    shadow.position.set(characterView.width - shadow.width, 0);
+    shadow.position.set(-17, 0);
     eyes.position.set(characterView.width * 0.083, characterView.height * 0.099);
 
     view.addChild(characterView);
@@ -40,9 +41,7 @@ export default class Room extends BaseEntity {
 
     view.scale.set(1);
 
-    const scale = limitation / view.height;
-
-    view.scale.set(scale);
+    view.scale.set(gameSize.width / view.width, limitation / view.height);
 
     view.position.set(gameSize.width / 2, limitation / 2);
   }

@@ -115,15 +115,12 @@ export default class BaseController {
   }
 
   initScene() {
-    const {applicationSettings} = this;
-
     this.app = new PIXI.Application({
       transparent: true,
       backgroundColor: 0xffffff,
+      backgroundAlpha: 0,
       resolution: Math.max(2, globalThis.devicePixelRatio),
-      autoResize: true,
       antialias: true,
-      ...applicationSettings
     });
 
     globalThis.__PIXI_APP__ = this.app; // devtools

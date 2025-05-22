@@ -3,7 +3,7 @@ import {assetsManager} from "./AssetsManager.js";
 
 export default class Storage {
 
-  static assetsPrefix = "/test-tas-crada/assets/";
+  static assetsPrefix = "./assets/";
 
   constructor({assetsData}) {
     this.assetsData = assetsData;
@@ -12,7 +12,7 @@ export default class Storage {
   load() {
     const {assetsData} = this;
 
-    const sortedAssets = assetsData.reduce((acc, {path, name, storageType}) => {
+    const sortedAssets = assetsData.reduce((acc, {path, name, storageType, params = {}}) => {
       if (!acc[storageType]) acc[storageType] = {};
       acc[storageType][name] = `${Storage.assetsPrefix}${path}`;
       return acc;
@@ -34,5 +34,12 @@ export default class Storage {
       const textureInstance = loadedResources[texturePath];
       assetsManager.addToStorage("texture", key, textureInstance);
     }
+  }
+
+  loadSounds(sounds) {
+    return Promise.all(Object.entries(sounds).map(([key, value]) => {
+      const sound = new Howl({src: [value], volume: 0.5});
+      assetsManager.addToStorage("sound", key, sound);
+    }));
   }
 }

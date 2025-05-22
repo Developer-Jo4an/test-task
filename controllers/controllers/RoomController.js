@@ -43,6 +43,8 @@ export default class RoomController extends BaseGameController {
 
     const rooms = gameFactory.getCollectionByType("room");
 
+    rooms.forEach(({character}) => character.initBehaviour());
+
     const grid = gameFactory.getItemById("grid", "gameGrid");
 
     const limitation = gameSize.height - grid.view.height;

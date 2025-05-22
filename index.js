@@ -18,12 +18,10 @@ const callbacksBus = [
     event: "state:changed", callback: ({state}) => {
       ({
         win: () => {
-          alert("Вы выиграли!");
-          eventDispatcher.dispatchEvent({type: "state:change", state: "reset"})
+          eventDispatcher.dispatchEvent({type: "state:change", state: "reset"});
         },
         lose: () => {
-          alert("Вы проиграли!");
-          eventDispatcher.dispatchEvent({type: "state:change", state: "reset"})
+          eventDispatcher.dispatchEvent({type: "state:change", state: "reset"});
         }
       })[state]?.();
     }

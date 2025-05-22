@@ -8,6 +8,10 @@ export default class Wrapper {
   eventDispatcher = new EventDispatcher();
 
   constructor({tweensSpace, container, assetsData}) {
+    if (Wrapper.instance)
+      return Wrapper.instance;
+    Wrapper.instance = this;
+
     this.container = container;
     this.storage = new Storage({assetsData});
     this.tweensSpace = tweensSpace;
@@ -26,7 +30,7 @@ export default class Wrapper {
 
   initController({ControllerConstructor, stateMachine, gameSettings}) {
     const {container, eventDispatcher, tweensSpace, storage} = this;
-    return this.controller = new ControllerConstructor({
+    return this.controller ??= new ControllerConstructor({
       container, eventDispatcher, tweensSpace, storage, stateMachine, gameSettings
     });
   }

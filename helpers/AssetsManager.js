@@ -9,6 +9,13 @@ class AssetsManager {
     this.storages[storageType] = {};
   }
 
+  getStorage(storageType) {
+    if (!this.storages[storageType])
+      throw new Error("storage doesn't exist");
+
+    return this.storages[storageType];
+  }
+
   removeStorage(storageType) {
     if (!this.storages[storageType])
       throw new Error("storage doesn't exist");

@@ -86,6 +86,35 @@ export default class Target extends BaseEntity {
 
     view.scale.set(height / view.height);
 
+    const {general} = this.parts;
+
+    general.sortableChildren = true;
+
+    const allTextures = assetsManager.getStorage("texture");
+
+    const clipTextures = Object.entries(allTextures).reduce((acc, [key, texture]) => {
+      if (key.startsWith("truth")) {
+        const order = +key.replace("truth", "");
+        acc[order] = texture;
+      }
+
+      return acc;
+    }, []);
+
+    const truthAnimation = this.truthAnimation ??= new PIXI.AnimatedSprite(clipTextures);
+    truthAnimation.animationSpeed = 0.5;
+    truthAnimation.anchor.set(0.5);
+    truthAnimation.loop = false;
+    truthAnimation.zIndex = 1;
+    truthAnimation.isActivated = false;
+    truthAnimation.onComplete = null;
+    truthAnimation.alpha = 0;
+
+    truthAnimation.scale.set(1);
+    truthAnimation.scale.set(general.width / truthAnimation.width, general.height / truthAnimation.height);
+
+    general.addChild(truthAnimation);
+
     this.updateTarget();
   }
 
@@ -131,6 +160,20 @@ export default class Target extends BaseEntity {
     showTimeline
     .to(target, {alpha: 1, ease: "sine.inOut", duration: 0.6})
     .to(target.scale, {x: initialScale.x, y: initialScale.y, ease: "back.out(2)", duration: 0.6}, 0);
+  }
+
+  truth() {
+    const {truthAnimation} = this;
+
+    if (!truthAnimation.isActivated) {
+      truthAnimation.alpha = 1;
+      truthAnimation.isActivated = true;
+      truthAnimation.gotoAndPlay(0);
+      truthAnimation.onComplete = () => {
+        truthAnimation.isActivated = false;
+        truthAnimation.alpha = 0;
+      };
+    }
   }
 
   update() {

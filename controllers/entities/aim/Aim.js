@@ -104,7 +104,7 @@ export default class Aim extends BaseEntity {
 
     if (!isActive || !isMoved) return;
 
-    this.progress += deltaTime / 1000;
+    this.progress += deltaTime * 0.002;
   }
 
   reset(data) {

@@ -2,13 +2,16 @@ import BaseController from "../BaseController.js";
 import GridController from "./GridController.js";
 import RoomController from "./RoomController.js";
 import GameStatsController from "./GameStatsController.js";
+import SoundController from "./SoundController.js";
 import {createGameFactory, gameFactory} from "../factory/GameFactory.js";
 import {createUtils} from "../utils/GameUtils.js";
 import {gameSize} from "../../constants/game.js";
 
 export default class GameGeneralController extends BaseController {
 
-  static controllersClasses = [GridController, RoomController, GameStatsController];
+  static controllersClasses = [GridController, RoomController, GameStatsController, SoundController];
+
+  static availableUpdateStates = ["showing", "playing", "feedback"];
 
   controllers = [];
 
@@ -27,6 +30,7 @@ export default class GameGeneralController extends BaseController {
     super.init();
 
     this.stage.sortableChildren = true;
+    this.stage.interactive = true;
   }
 
   createControllersSelect() {
@@ -72,7 +76,7 @@ export default class GameGeneralController extends BaseController {
   onResize(data) {
     const {width, height} = super.onResize(data);
 
-    const scale = height / gameSize.height;
+    const scale = Math.min(width / gameSize.width, height / gameSize.height);
 
     this.stage.scale.set(scale);
 

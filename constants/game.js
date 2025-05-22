@@ -4,6 +4,7 @@ export const stateMachine = {
     nextState: "initialization",
     isLoading: true,
     isDefault: true,
+    isUpdate: false,
     ignoreNext: false
   },
   initialization: {
@@ -11,6 +12,7 @@ export const stateMachine = {
     nextState: "showing",
     isLoading: true,
     isDefault: false,
+    isUpdate: false,
     ignoreNext: false
   },
   showing: {
@@ -18,6 +20,7 @@ export const stateMachine = {
     nextState: "playing",
     isLoading: false,
     isDefault: false,
+    isUpdate: true,
     ignoreNext: false
   },
   playing: {
@@ -25,6 +28,7 @@ export const stateMachine = {
     nextState: "feedback",
     isLoading: false,
     isDefault: false,
+    isUpdate: true,
     ignoreNext: true
   },
   feedback: {
@@ -32,6 +36,7 @@ export const stateMachine = {
     nextState: "playing",
     isLoading: false,
     isDefault: false,
+    isUpdate: true,
     ignoreNext: false
   },
   win: {
@@ -39,6 +44,7 @@ export const stateMachine = {
     nextState: "reset",
     isLoading: false,
     isDefault: false,
+    isUpdate: false,
     ignoreNext: true
   },
   lose: {
@@ -46,6 +52,7 @@ export const stateMachine = {
     nextState: "reset",
     isLoading: false,
     isDefault: false,
+    isUpdate: false,
     ignoreNext: true
   },
   reset: {
@@ -53,9 +60,12 @@ export const stateMachine = {
     nextState: "initialization",
     isLoading: false,
     isDefault: false,
+    isUpdate: false,
     ignoreNext: false
   }
 };
+
+export const updateStates = Object.entries(stateMachine).map(([key, {isUpdate}]) => isUpdate && key).filter(Boolean);
 
 export const gameSize = {width: 720, height: 1565};
 
@@ -77,28 +87,51 @@ export const gameSettings = {
 };
 
 export const assetsData = [
-  {path: "stars/star_blue.png", name: "starBlue", storageType: "texture"},
-  {path: "stars/star_green.png", name: "starGreen", storageType: "texture"},
-  {path: "stars/star_orange.png", name: "starOrange", storageType: "texture"},
-  {path: "stars/star_pink.png", name: "starPink", storageType: "texture"},
-  {path: "stars/star_purple.png", name: "starPurple", storageType: "texture"},
-  {path: "stars/star_red.png", name: "starRed", storageType: "texture"},
-  {path: "stars/star_yellow.png", name: "starYellow", storageType: "texture"},
+  {path: "textures/stars/star_blue.png", name: "starBlue", storageType: "texture"},
+  {path: "textures/stars/star_green.png", name: "starGreen", storageType: "texture"},
+  {path: "textures/stars/star_orange.png", name: "starOrange", storageType: "texture"},
+  {path: "textures/stars/star_pink.png", name: "starPink", storageType: "texture"},
+  {path: "textures/stars/star_purple.png", name: "starPurple", storageType: "texture"},
+  {path: "textures/stars/star_red.png", name: "starRed", storageType: "texture"},
+  {path: "textures/stars/star_yellow.png", name: "starYellow", storageType: "texture"},
 
-  {path: "cell/cell.png", name: "cell", storageType: "texture"},
-  {path: "cell/active-cell.png", name: "activeCell", storageType: "texture"},
+  {path: "textures/cell/cell.png", name: "cell", storageType: "texture"},
+  {path: "textures/cell/active-cell.png", name: "activeCell", storageType: "texture"},
 
-  {path: "grid/grid-background.png", name: "gridBackground", storageType: "texture"},
-  {path: "grid/grid-background-cap.png", name: "gridBackgroundCap", storageType: "texture"},
+  {path: "textures/grid/grid-background.png", name: "gridBackground", storageType: "texture"},
+  {path: "textures/grid/grid-background-cap.png", name: "gridBackgroundCap", storageType: "texture"},
 
-  {path: "room/room-dark.png", name: "darkRoom", storageType: "texture"},
-  {path: "room/room-light.png", name: "lightRoom", storageType: "texture"},
+  {path: "textures/room/room-dark.png", name: "darkRoom", storageType: "texture"},
+  {path: "textures/room/room-light.png", name: "lightRoom", storageType: "texture"},
 
-  {path: "character/character.png", name: "character", storageType: "texture"},
-  {path: "character/character-eyelids.png", name: "characterEyelids", storageType: "texture"},
-  {path: "character/character-shadow.png", name: "characterShadow", storageType: "texture"},
+  {path: "textures/character/character.png", name: "character", storageType: "texture"},
+  {path: "textures/character/character-eyelids.png", name: "characterEyelids", storageType: "texture"},
+  {path: "textures/character/character-shadow.png", name: "characterShadow", storageType: "texture"},
 
-  {path: "target/pendulum-arrow.png", name: "pendulumArrow", storageType: "texture"},
-  {path: "target/pendulum-general.png", name: "pendulumGeneral", storageType: "texture"},
-  {path: "target/pendulum-top.png", name: "pendulumTop", storageType: "texture"}
+  {path: "textures/target/pendulum-arrow.png", name: "pendulumArrow", storageType: "texture"},
+  {path: "textures/target/pendulum-general.png", name: "pendulumGeneral", storageType: "texture"},
+  {path: "textures/target/pendulum-top.png", name: "pendulumTop", storageType: "texture"},
+
+  {path: "sounds/background.mp3", name: "background", storageType: "sound"},
+  {path: "sounds/click.mp3", name: "click", storageType: "sound"},
+  {path: "sounds/lose.mp3", name: "lose", storageType: "sound"},
+  {path: "sounds/win.mp3", name: "win", storageType: "sound"},
+
+  {path: "clips/truth/00.png", name: "truth0", storageType: "texture"},
+  {path: "clips/truth/01.png", name: "truth1", storageType: "texture"},
+  {path: "clips/truth/02.png", name: "truth2", storageType: "texture"},
+  {path: "clips/truth/03.png", name: "truth3", storageType: "texture"},
+  {path: "clips/truth/04.png", name: "truth4", storageType: "texture"},
+  {path: "clips/truth/05.png", name: "truth5", storageType: "texture"},
+  {path: "clips/truth/06.png", name: "truth6", storageType: "texture"},
+  {path: "clips/truth/07.png", name: "truth7", storageType: "texture"},
+  {path: "clips/truth/08.png", name: "truth8", storageType: "texture"},
+  {path: "clips/truth/09.png", name: "truth9", storageType: "texture"},
+  {path: "clips/truth/10.png", name: "truth10", storageType: "texture"},
+  {path: "clips/truth/11.png", name: "truth11", storageType: "texture"},
+  {path: "clips/truth/12.png", name: "truth12", storageType: "texture"},
+  {path: "clips/truth/13.png", name: "truth13", storageType: "texture"},
+  {path: "clips/truth/14.png", name: "truth14", storageType: "texture"},
+  {path: "clips/truth/14.png", name: "truth14", storageType: "texture"},
+  {path: "clips/truth/15.png", name: "truth15", storageType: "texture"}
 ];

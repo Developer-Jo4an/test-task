@@ -1,6 +1,7 @@
 import BaseGameController from "./BaseGameController.js";
 import {eventSubscription} from "../../utils/events/eventSubscription.js";
 import {gameFactory} from "../factory/GameFactory.js";
+import {updateStates} from "../../constants/game.js";
 
 export default class GameStatsController extends BaseGameController {
 
@@ -92,11 +93,14 @@ export default class GameStatsController extends BaseGameController {
 
       const onComplete = res => {
         const {items: {star: {entityId}}} = cell;
+
         cell.destroy();
 
         !index && gameTarget.updateTarget();
 
         flyTimeline.delete(tweensSpace);
+
+        gameTarget.truth();
 
         res(entityId);
       };
@@ -130,6 +134,7 @@ export default class GameStatsController extends BaseGameController {
 
   onCellUpdated({cell}) {
     const {activeCells} = this;
+
     const {mode, items: {star}} = cell;
 
     const cells = gameFactory.getCollectionByType("cell");
@@ -153,11 +158,17 @@ export default class GameStatsController extends BaseGameController {
   onUpdateActiveCells() {
     const {activeCells, gameSettings: {stats: {target}}} = this;
 
-    if (activeCells?.length === target)
+    const cells = gameFactory.getCollectionByType("cell");
+
+    if (activeCells?.length === target) {
+      cells.forEach(cell => !activeCells.includes(cell) && (cell.mode = "static"));
       this.setState("feedback");
+    }
   }
 
   update() {
+    if (!updateStates.includes(this.state)) return;
+
     const target = gameFactory.getItemById("target", "gameTarget");
 
     target.update();

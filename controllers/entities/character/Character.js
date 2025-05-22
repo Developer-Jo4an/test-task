@@ -10,26 +10,29 @@ export default class Character extends BaseEntity {
 
   init() {
     this.initViews();
-    this.initBehaviour();
   }
 
   initViews() {
     const view = this.view ??= new PIXI.Container();
     view.sortableChildren = true;
 
-    const shadowTexture = assetsManager.getFromStorage("texture", "characterShadow");
-    const shadow = this.shadow ??= new PIXI.Sprite(shadowTexture);
-    view.addChild(shadow);
-
     const characterTexture = assetsManager.getFromStorage("texture", "character");
     const character = this.character ??= new PIXI.Sprite();
+    character.name = "character";
     character.texture = characterTexture;
-    view.addChild(character);
+
+    const shadowTexture = assetsManager.getFromStorage("texture", "characterShadow");
+    const shadow = this.shadow ??= new PIXI.Sprite(shadowTexture);
+    shadow.name = "characterShadow";
 
     const eyelidsTexture = assetsManager.getFromStorage("texture", "characterEyelids");
     const eyes = this.eyes ??= new PIXI.Sprite(eyelidsTexture);
+    eyes.name = "characterEyes";
     eyes.alpha = 0;
+
+    view.addChild(shadow);
     view.addChild(eyes);
+    view.addChild(character);
   }
 
   initBehaviour() {
@@ -49,8 +52,6 @@ export default class Character extends BaseEntity {
   }
 
   destroy() {
-    const {id, tweensSpace} = this;
-    gsap.localTimeline.discontinue(tweensSpace, `blink:${id}`);
     super.destroy();
   }
 }
